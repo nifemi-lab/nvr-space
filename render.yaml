@@ -1,30 +1,49 @@
-# NVR Space — hosting config for hosts that inject PORT as an env var.
+# NVR Space — hosting config for Render.
 # Zero npm dependencies, so there is no build step and no install.
+#
+# PLAN WARNING — read before switching to "free":
+#   Persistent disks are NOT available on Render's free tier. With no disk,
+#   data/db.json lives in an ephemeral container and is WIPED ON EVERY DEPLOY
+#   — every account, every session, gone. That is why this file asks for
+#   `plan: starter` ($7/mo). The free tier also idles out after ~15 minutes
+#   and takes about a minute to wake on the next request.
+#   The site is fully functional on the free tier; you just lose accounts on
+#   redeploy. Fine for a demo, not fine if people have signed up.
 services:
   - type: web
     name: nvr-space
     runtime: node
-    plan: starter          # free tier works, but its disk is ephemeral — see README
-    buildCommand: ""       # nothing to build
+    plan: starter
+    buildCommand: ""            # nothing to build — no npm install
     startCommand: node server.js
     healthCheckPath: /healthz
     autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
-      # PORT is injected by the host — do not hardcode it
+      - key: PORT
+        value: ""               # Render injects this; the server reads it
+      # ---- you must fill these two in, Render will not guess them ----
       - key: PUBLIC_ORIGIN
-        sync: false        # set this to your real https:// URL
+        sync: false
+        # e.g. https://nvr-space.onrender.com
+        # WITHOUT THIS, password-reset and verification emails point at
+        # localhost and the links are dead on arrival.
       - key: RESEND_API_KEY
-        sync: false        # paste the key from resend.com; without it emails stay in dev mode
+        sync: false
+        # from resend.com (free tier, ~3k emails/mo).
+        # WITHOUT THIS the app still works, but email verification and
+        # password reset only complete for you locally — dev mode is
+        # loopback-only on purpose, because returning a live reset link to
+        # the public would be an account-takeover hole.
       - key: MAIL_FROM
         value: NVR Space <no-reply@yourdomain.com>
       - key: COOKIE_SECURE
-        value: "1"
+        value: "1"              # the host serves HTTPS
       - key: REQUIRE_VERIFICATION
-        value: "0"
+        value: "0"              # "1" blocks sign-in until the email is confirmed
       - key: DATA_DIR
-        sync: false        # point at a mounted disk, e.g. /var/data
+        value: /var/data        # where the mounted disk lives
     disk:
       name: nvr-data
       mountPath: /var/data
