@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Tips (@devtips) · NVR Space</title>
+    <link rel="stylesheet" href="index.css">
+    <script>
+        /* apply the stored theme before first paint (no flash of wrong theme) */
+        try {
+            var t = localStorage.getItem('theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+    </script>
+</head>
+<body>
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="nvricon" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#7b9cff"/>
+                <stop offset=".5" stop-color="#64f0c7"/>
+                <stop offset="1" stop-color="#4f6ef7"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <header class="header">
+        <div class="header-left">
+            <button class="icon-btn" id="menu-btn" aria-label="Menu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+            </button>
+            <a class="logo" href="index.html" aria-label="NVR Space home">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="nvrlogo" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#7b9cff"/>
+                            <stop offset=".5" stop-color="#64f0c7"/>
+                            <stop offset="1" stop-color="#4f6ef7"/>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#nvrlogo)" d="M8 5v14l11-7z"/>
+                </svg>
+                <span>NVR Space</span>
+            </a>
+        </div>
+
+        <div class="header-search">
+            <input type="text" class="search-input" placeholder="Search" aria-label="Search">
+            <button class="search-btn" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+            <button class="icon-btn" aria-label="Search with your voice">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0119 11h-2z"/></svg>
+            </button>
+        </div>
+
+        <div class="header-actions">
+            <button class="create-btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+                <span>Create</span>
+            </button>
+            <button class="icon-btn msg-btn" aria-label="Messages">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+            </button>
+            <button class="icon-btn" aria-label="Notifications">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4.5C13.5 3.67 12.83 3 12 3s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                <span class="badge">3</span>
+            </button>
+            <button class="icon-btn theme-btn" id="theme-btn" aria-label="Switch to light theme" title="Switch to light theme">
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-sun"><path d="M12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM2.5 11h19v2h-19zM11 2.5h2v19h-2zM19 17.72 17.72 19 5 6.28 6.28 5zM19 6.28 17.72 5 6.28 19 5 17.72z"/></svg>
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <button class="avatar-btn" aria-label="Account">
+                <img src="img/channels4_profile.jpg" alt="Your avatar">
+            </button>
+        </div>
+    </header>
+
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <nav class="sidebar" aria-label="Main navigation">
+        <a href="index.html" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="shorts.html" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>
+            <span>Shorts</span>
+        </a>
+        <a href="explore.html" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.6 4.6L13.4 13.4 7.4 17.4l3.2-6.8z"/></svg>
+            <span>Explore</span>
+        </a>
+        <a href="subscriptions.html" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M4 5h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2zm5.5 3.8v6.4L15 12z"/></svg>
+            <span>Subscriptions</span>
+        </a>
+
+        <div class="side-divider"></div>
+        <p class="side-label">Your stuff</p>
+        <a href="profile.html" class="side-item active" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 3a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 11c4.4 0 8 2.2 8 5v1H4v-1c0-2.8 3.6-5 8-5z"/></svg>
+            <span>You</span>
+        </a>
+        <a href="explore.html" class="side-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span>Saved</span>
+        </a>
+        <a href="settings.html#history" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v5.2l4 2.4-1 1.6-5-3V7z"/></svg>
+            <span>History</span>
+        </a>
+
+        <div class="side-divider"></div>
+        <p class="side-label">Subscriptions</p>
+        <a href="explore.html?q=Code%20With%20Me" class="side-item side-channel"><img src="img/profile-picture.png" alt="Code With Me avatar">
+            <span>Code With Me</span>
+        </a>
+        <a href="explore.html?q=Dev%20Tips" class="side-item side-channel"><img src="img/channels4_profile.jpg" alt="Dev Tips avatar">
+            <span>Dev Tips</span>
+        </a>
+        <a href="explore.html?q=Nifemi%20Codes" class="side-item side-channel"><img src="img/profile-picture.png" alt="Nifemi Codes avatar">
+            <span>Nifemi Codes</span>
+        </a>
+
+        <div class="side-divider"></div>
+        <a href="settings.html" class="side-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.49.49 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87a.49.49 0 00.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <main class="content">
+        <section class="profile-header" aria-label="Profile">
+            <div class="profile-banner" role="img" aria-label="Cover — deep space with stars"></div>
+            <div class="profile-top">
+                <span class="profile-avatar-ring">
+                    <img class="profile-avatar" src="img/channels4_profile.jpg" alt="Dev Tips avatar">
+                </span>
+                <div class="profile-actions">
+                    <button class="follow-btn" id="profile-follow" aria-pressed="false">
+                        <span class="lbl-follow">Follow</span><span class="lbl-following">Following</span><span class="lbl-unfollow">Unfollow</span>
+                    </button>
+                    <button class="profile-msg-btn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+                        <span>Message</span>
+                    </button>
+                    <button class="icon-btn" aria-label="More options">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <h1 class="profile-name">Dev Tips</h1>
+            <p class="profile-handle">@devtips</p>
+            <p class="profile-stats">1,240 posts · 18.2k followers · 312 following</p>
+            <p class="profile-bio">Frontend developer turning coffee into websites. Posting new tips, tutorials and the occasional hot take every week.</p>
+            <p class="profile-link">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12a3.1 3.1 0 013.1-3.1h4V7H7a5 5 0 000 10h4v-1.9H7A3.1 3.1 0 013.9 12zM8 13h8v-2H8zm9-6h-4v1.9h4a3.1 3.1 0 010 6.2h-4V16h4a5 5 0 000-10z"/></svg>
+                nvrspace.dev
+            </p>
+        </section>
+
+        <div class="profile-tabs" role="tablist" aria-label="Profile content">
+            <button class="profile-tab active" role="tab" aria-selected="true" data-tab="videos">Videos <span class="tab-count">9</span></button>
+            <button class="profile-tab" role="tab" aria-selected="false" data-tab="shorts">Shorts <span class="tab-count">6</span></button>
+            <button class="profile-tab" role="tab" aria-selected="false" data-tab="posts">Posts <span class="tab-count">8</span></button>
+            <button class="profile-tab" role="tab" aria-selected="false" data-tab="tagged">Tagged <span class="tab-count">4</span></button>
+        </div>
+
+        <div class="profile-grid" id="profile-grid" role="tabpanel">
+            <!-- skeleton shimmer (§7) — replaced by renderTab() when tiles land -->
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+            <div class="skeleton-card" aria-hidden="true"><div class="skeleton skeleton-media"></div></div>
+        </div>
+    </main>
+
+    <aside class="trending-panel" id="trending-panel" aria-label="Trending"></aside>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="index.html" class="mob-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="shorts.html" class="mob-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>
+            <span>Shorts</span>
+        </a>
+        <button class="mob-create" aria-label="Create">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+        </button>
+        <a href="explore.html" class="mob-item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.6 4.6L13.4 13.4 7.4 17.4l3.2-6.8z"/></svg>
+            <span>Explore</span>
+        </a>
+        <a href="profile.html" class="mob-item active" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 3a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 11c4.4 0 8 2.2 8 5v1H4v-1c0-2.8 3.6-5 8-5z"/></svg>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="shell.js"></script>
+    <script src="overlays.js"></script>
+    <script src="trending.js"></script>
+    <script src="profile.js"></script>
+    <script src="account.js"></script>
+
+</body>
+</html>

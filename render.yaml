@@ -1,0 +1,31 @@
+# NVR Space — hosting config for hosts that inject PORT as an env var.
+# Zero npm dependencies, so there is no build step and no install.
+services:
+  - type: web
+    name: nvr-space
+    runtime: node
+    plan: starter          # free tier works, but its disk is ephemeral — see README
+    buildCommand: ""       # nothing to build
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # PORT is injected by the host — do not hardcode it
+      - key: PUBLIC_ORIGIN
+        sync: false        # set this to your real https:// URL
+      - key: RESEND_API_KEY
+        sync: false        # paste the key from resend.com; without it emails stay in dev mode
+      - key: MAIL_FROM
+        value: NVR Space <no-reply@yourdomain.com>
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: REQUIRE_VERIFICATION
+        value: "0"
+      - key: DATA_DIR
+        sync: false        # point at a mounted disk, e.g. /var/data
+    disk:
+      name: nvr-data
+      mountPath: /var/data
+      sizeGB: 1

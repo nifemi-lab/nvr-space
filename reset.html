@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset your password · NVR Space</title>
+    <link rel="stylesheet" href="index.css">
+    <script>
+        /* apply the stored theme before first paint (no flash of wrong theme) */
+        try {
+            var t = localStorage.getItem('theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+    </script>
+</head>
+<body>
+
+    <!-- standalone page: only reached from the reset link in the email -->
+    <main class="reset-page">
+        <div class="acct-dialog acct-reset" role="dialog" aria-labelledby="reset-title">
+            <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+                <defs>
+                    <linearGradient id="nvricon" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#7b9cff"/>
+                        <stop offset=".5" stop-color="#64f0c7"/>
+                        <stop offset="1" stop-color="#4f6ef7"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <a class="logo reset-logo" href="index.html" aria-label="NVR Space home">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="nvrlogo" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#7b9cff"/>
+                            <stop offset=".5" stop-color="#64f0c7"/>
+                            <stop offset="1" stop-color="#4f6ef7"/>
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#nvrlogo)" d="M8 5v14l11-7z"/>
+                </svg>
+                <span>NVR Space</span>
+            </a>
+
+            <h1 class="acct-title" id="reset-title">Choose a new password</h1>
+            <p class="acct-sub" id="reset-sub">
+                Pick something you don't use anywhere else. At least 8 characters.
+            </p>
+
+            <form class="acct-form" id="reset-form" novalidate>
+                <label class="acct-label" for="new-pass">New password</label>
+                <input class="acct-input" id="new-pass" name="password" type="password"
+                       autocomplete="new-password" placeholder="At least 8 characters">
+                <label class="acct-label" for="new-pass2">Confirm new password</label>
+                <input class="acct-input" id="new-pass2" name="confirm" type="password"
+                       autocomplete="new-password" placeholder="Type it again">
+                <p class="auth-error" id="reset-error" role="alert" hidden></p>
+                <div class="acct-actions">
+                    <a class="btn-ghost reset-cancel" href="index.html">Cancel</a>
+                    <button class="btn-accent" type="submit" id="reset-submit">Set new password</button>
+                </div>
+            </form>
+
+            <p class="auth-note reset-foot">
+                Reset links work once and expire after an hour.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            'use strict';
+            var token = new URLSearchParams(location.search).get('token');
+            var form = document.getElementById('reset-form');
+            var err = document.getElementById('reset-error');
+            var submit = document.getElementById('reset-submit');
+            var sub = document.getElementById('reset-sub');
+            var p1 = document.getElementById('new-pass');
+            var p2 = document.getElementById('new-pass2');
+
+            function fail(msg) {
+                err.textContent = msg;
+                err.hidden = false;
+                submit.disabled = false;
+                submit.textContent = 'Set new password';
+            }
+
+            /* no token in the URL — nothing to do here */
+            if (!token) {
+                form.hidden = true;
+                sub.textContent = 'This page needs a reset link.';
+                sub.parentElement.innerHTML =
+                    '<h1 class="acct-title">Link missing</h1>' +
+                    '<p class="acct-sub">Open the reset link from your email, or request a new one from the sign-in page.</p>' +
+                    '<p><a class="auth-guest" href="index.html">Back to NVR Space</a></p>';
+                return;
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                err.hidden = true;
+                if (p1.value.length < 8) { fail('Password must be at least 8 characters'); return; }
+                if (p1.value !== p2.value) { fail('The two passwords do not match'); return; }
+
+                submit.disabled = true;
+                submit.textContent = 'Saving…';
+                fetch('/api/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, password: p1.value }),
+                    credentials: 'same-origin',
+                }).then(function (r) {
+                    return r.json().catch(function () { return {}; }).then(function (j) {
+                        return { status: r.status, json: j };
+                    });
+                }).then(function (res) {
+                    if (res.status === 200) {
+                        form.hidden = true;
+                        sub.parentElement.innerHTML =
+                            '<h1 class="acct-title" style="color:var(--accent)">Password updated</h1>' +
+                            '<p class="acct-sub">You can sign in with your new password now. ' +
+                            'For your safety, every other signed-in device was signed out.</p>' +
+                            '<p><a class="auth-guest" href="index.html">Sign in</a></p>';
+                        return;
+                    }
+                    fail(res.json.error || 'Something went wrong. Try again.');
+                });
+            });
+
+            p1.focus();
+        })();
+    </script>
+
+</body>
+</html>

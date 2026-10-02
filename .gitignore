@@ -1,0 +1,14 @@
+# NVR Space — accounts and session tokens. This must never reach a repo.
+data/
+*.tmp
+
+# local tooling / editor noise
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# node (the server is deliberately dependency-free, but just in case)
+node_modules/
+npm-debug.log*
