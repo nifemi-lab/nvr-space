@@ -75,6 +75,91 @@ body {
     font-size: 14px;
 }
 
+/* ===== Deep-field page starfield =====
+   The reference look (Hubble deep field): a dense scatter of small
+   white/blue stars over the dark bg with a few soft warm galaxies. Same
+   box-shadow technique as the control stars (--stars, §7) but fixed to the
+   viewport and always on; z-index:-1 puts the layers above the body glows
+   and below every surface. Hidden in light theme — white dots read as
+   noise on #f4f6fb. Motion is covered by the global reduced-motion rule. */
+body {
+    position: relative;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+}
+
+/* bright layer: sharp stars plus a handful of blurred galaxies */
+body::before {
+    box-shadow:
+        4vw 8vh 0 0 #fff, 11vw 23vh 0 0 rgba(255, 255, 255, .9), 18vw 5vh 0 0 #aebdff,
+        25vw 14vh 0 0 #fff, 33vw 9vh 0 0 rgba(255, 255, 255, .75), 41vw 19vh 0 0 #cfe0ff,
+        52vw 6vh 0 0 #fff, 61vw 13vh 0 0 #9db4ff, 70vw 8vh 0 0 rgba(255, 255, 255, .85),
+        79vw 17vh 0 0 #e6ecff, 88vw 10vh 0 0 #7b9cff, 96vw 22vh 0 0 rgba(255, 255, 255, .8),
+        8vw 34vh 0 0 #d7e2ff, 16vw 44vh 0 0 #fff, 23vw 38vh 0 0 rgba(255, 255, 255, .7),
+        31vw 52vh 0 0 #b9c9ff, 39vw 41vh 0 0 #fff, 47vw 55vh 0 0 rgba(255, 255, 255, .9),
+        56vw 44vh 0 0 #64f0c7, 64vw 58vh 0 0 #fff, 72vw 39vh 0 0 rgba(255, 255, 255, .75),
+        81vw 52vh 0 0 #cdd9ff, 90vw 43vh 0 0 #fff, 97vw 57vh 0 0 #a9bcff,
+        5vw 63vh 0 0 rgba(255, 255, 255, .85), 14vw 74vh 0 0 #fff, 22vw 66vh 0 0 #8fa8ff,
+        30vw 79vh 0 0 rgba(255, 255, 255, .8), 38vw 68vh 0 0 #e2e9ff, 46vw 83vh 0 0 #fff,
+        55vw 71vh 0 0 rgba(255, 255, 255, .7), 63vw 86vh 0 0 #c3d1ff, 71vw 74vh 0 0 #fff,
+        80vw 88vh 0 0 rgba(255, 255, 255, .85), 89vw 69vh 0 0 #7b9cff, 95vw 81vh 0 0 #fff,
+        3vw 90vh 0 0 rgba(255, 255, 255, .75), 12vw 97vh 0 0 #c9d6ff, 27vw 93vh 0 0 #fff,
+        50vw 96vh 0 0 rgba(255, 255, 255, .8), 68vw 95vh 0 0 #dce5ff, 85vw 94vh 0 0 #fff,
+        9vw 18vh 9px 2px rgba(255, 209, 102, .35), 77vw 11vh 11px 2px rgba(123, 156, 255, .3),
+        58vw 73vh 9px 2px rgba(255, 154, 92, .3), 89vw 57vh 10px 2px rgba(201, 162, 255, .28),
+        31vw 87vh 11px 2px rgba(255, 226, 160, .28), 14vw 61vh 9px 2px rgba(255, 120, 120, .26),
+        66vw 34vh 10px 2px rgba(120, 190, 255, .28), 45vw 49vh 12px 2px rgba(255, 209, 102, .24),
+        2vw 45vh 10px 2px rgba(123, 156, 255, .26);
+    animation: starfield-drift 160s linear infinite alternate;
+}
+
+/* dim layer: faint scatter that twinkles against the bright layer */
+body::after {
+    box-shadow:
+        7vw 16vh 0 0 rgba(255, 255, 255, .5), 15vw 28vh 0 0 rgba(255, 255, 255, .4),
+        21vw 11vh 0 0 rgba(255, 255, 255, .55), 28vw 33vh 0 0 rgba(255, 255, 255, .35),
+        36vw 22vh 0 0 rgba(255, 255, 255, .5), 44vw 14vh 0 0 rgba(255, 255, 255, .4),
+        58vw 25vh 0 0 rgba(255, 255, 255, .55), 66vw 19vh 0 0 rgba(255, 255, 255, .35),
+        74vw 29vh 0 0 rgba(255, 255, 255, .5), 83vw 25vh 0 0 rgba(255, 255, 255, .4),
+        92vw 33vh 0 0 rgba(255, 255, 255, .55), 10vw 51vh 0 0 rgba(255, 255, 255, .45),
+        19vw 58vh 0 0 rgba(255, 255, 255, .35), 27vw 47vh 0 0 rgba(255, 255, 255, .5),
+        35vw 60vh 0 0 rgba(255, 255, 255, .4), 43vw 70vh 0 0 rgba(255, 255, 255, .55),
+        51vw 62vh 0 0 rgba(255, 255, 255, .35), 60vw 49vh 0 0 rgba(255, 255, 255, .5),
+        68vw 64vh 0 0 rgba(255, 255, 255, .4), 76vw 55vh 0 0 rgba(255, 255, 255, .55),
+        84vw 63vh 0 0 rgba(255, 255, 255, .35), 93vw 72vh 0 0 rgba(255, 255, 255, .5),
+        6vw 79vh 0 0 rgba(255, 255, 255, .4), 17vw 86vh 0 0 rgba(255, 255, 255, .55),
+        25vw 74vh 0 0 rgba(255, 255, 255, .35), 34vw 91vh 0 0 rgba(255, 255, 255, .5),
+        42vw 80vh 0 0 rgba(255, 255, 255, .4), 59vw 90vh 0 0 rgba(255, 255, 255, .55),
+        67vw 82vh 0 0 rgba(255, 255, 255, .35), 75vw 93vh 0 0 rgba(255, 255, 255, .5),
+        86vw 84vh 0 0 rgba(255, 255, 255, .4), 94vw 90vh 0 0 rgba(255, 255, 255, .55),
+        49vw 36vh 0 0 rgba(255, 255, 255, .45), 62vw 4vh 0 0 rgba(255, 255, 255, .5),
+        3vw 40vh 0 0 rgba(255, 255, 255, .4), 97vw 5vh 0 0 rgba(255, 255, 255, .5);
+    animation: starfield-twinkle 5s ease-in-out infinite alternate;
+}
+
+@keyframes starfield-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-56px, 28px, 0); }
+}
+
+@keyframes starfield-twinkle {
+    from { opacity: .4; }
+    to { opacity: .95; }
+}
+
+html[data-theme="light"] body::before,
+html[data-theme="light"] body::after {
+    display: none;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
