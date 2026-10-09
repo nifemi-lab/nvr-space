@@ -30,8 +30,7 @@ services:
         value: ""               # Render injects this; the server reads it
       # ---- fill these two in, Render will not guess them ----
       - key: PUBLIC_ORIGIN
-        sync: false
-        # e.g. https://nvr-space.onrender.com
+        value: https://nvr-space.onrender.com
         # WITHOUT THIS, password-reset and verification emails point at
         # localhost and the links are dead on arrival.
       - key: RESEND_API_KEY
